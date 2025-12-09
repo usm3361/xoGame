@@ -9,6 +9,9 @@
   "author": "",
   "license": "ISC",
   "description": "",
-  "type": "commonjs"
-
+  "type": "module",
+  "dependencies": {
+    "analiza-sync": "^1.0.1",
+    "readline-sync": "^1.4.10"
+  }
 }

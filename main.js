@@ -1,50 +1,45 @@
-const readline = require("readline");
-impo
-const { createBoard, printBoard } = require("./board");
-const { isValidMove, updateBoard, checkWin, checkDraw } = require("./logic");
-const { getComputerMove } = require("./ai");
+import input from "analiza-sync";
+import boardFunc from "./board.js";
+import logic from "./logic.js";
+import aiplayer from "./ai.js";
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
-let board = createBoard();
+let board = boardFunc.createBoard();
 let currentPlayer = "X";
 let isVsComputer = false;
 
 function startGame() {
-  console.log("ברוכים הבאים לאיקס עיגול!");
-  console.log("1. שחקן נגד שחקן");
-  console.log("2. שחקן נגד מחשב");
+  console.log("welcome to game!");
+  console.log("1. player VS player");
+  console.log("2. player VS ai");
 
-  rl.question("בחר מצב משחק (1 או 2): ", (answer) => {
-    if (answer === "2") {
+  let modeGame = input("Select a game mode 1/2: ")
+
+    if (modeGame === "2") {
       isVsComputer = true;
-      console.log("מצב נבחר: נגד המחשב.");
+      console.log("Game mode selected: player VS ai ");
     } else {
-      console.log("מצב נבחר: 2 שחקנים.");
+      console.log("Game mode selected: 2 players");
     }
 
-    printBoard(board);
+    boardFunc.printBoard(board);
     playTurn();
-  });
-}
+  };
+
 
 function playTurn() {
   if (isVsComputer && currentPlayer === "O") {
-    console.log("המחשב חושב...");
+    console.log("ai thinks");
     setTimeout(() => {
       const computerMove = getComputerMove(board);
       handleMove(computerMove);
     }, 1000);
   } else {
-    rl.question(`תור שחקן ${currentPlayer}, בחר משבצת (1-9): `, (input) => {
+    input(`Player's turn ${currentPlayer}, Select a slot (1-9): `, (input) => {
       const position = parseInt(input);
 
       if (!isValidMove(board, position)) {
-        console.log("שגיאה: מהלך לא חוקי או תא תפוס. נסה שוב.");
-        playTurn(); // קריאה חוזרת לאותה פונקציה
+        console.log("Error: Slot is occupied");
+        playTurn();
         return;
       }
 
@@ -58,14 +53,14 @@ function handleMove(position) {
   printBoard(board);
 
   if (checkWin(board)) {
-    console.log(`מזל טוב! שחקן ${currentPlayer} ניצח!`);
-    rl.close();
+    console.log(`congratulations player ${currentPlayer} won!`);
+    readline.close();
     return;
   }
 
   if (checkDraw(board)) {
-    console.log("המשחק נגמר בתיקו!");
-    rl.close();
+    console.log("המשחק נגמר The game ended in a draw.");
+    readline.close();
     return;
   }
 
