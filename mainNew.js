@@ -1,6 +1,12 @@
 import input from "analiza-sync";
 import boardFunc from "./board.js";
-import logic from "./logic.js";
+import {
+  isValidMove,
+  updateBoard,
+  findWinningMove,
+  checkWin,
+
+} from "./logic.js";
 import getComputerMove from "./ai.js";
 import createPlayer from "./players.js";
 
@@ -8,7 +14,7 @@ export default function startGame() {
   const board = boardFunc.createBoard();
   const userName = input("please enter your name: \nname:   ", "\n");
   let isValidType = false;
-  let type = input("please enter type (x or o)\ntype:   ");
+  let type = input("please enter type (x or o)\ntype:   ").toLowerCase();
   while (!isValidType) {
     if (type.length > 1 || (type !== "o" && type !== "x")) {
       console.log("This type is not valid, please try again");
@@ -36,10 +42,10 @@ export default function startGame() {
   } else {
     currPlayer = p2;
   }
-  while (!logic.checkWin(board)) {
+  while (!checkWin(board)) {
     boardFunc.printBoard(board);
     playTurn(currPlayer, board);
-    if (logic.checkWin(board)) {
+    if (checkWin(board)) {
       boardFunc.printBoard(board);
       console.log(`GameOver ${currPlayer.name} is won`);
     } else {
@@ -54,8 +60,8 @@ export default function startGame() {
 function playTurn(currPlayer, board) {
   if (currPlayer.name === "Ai") {
     console.log("ai thinks...");
-    const computerMove = getComputerMove(board);
-    if (!logic.isValidMove(board, computerMove)) {
+    const computerMove = getComputerMove(board, currPlayer);
+    if (!isValidMove(board, computerMove)) {
       console.log("Error: Slot is occupied");
       playTurn(currPlayer, board);
     } else {
@@ -65,7 +71,7 @@ function playTurn(currPlayer, board) {
     const slot = input(
       `${currPlayer.name}, please Select a slot (1-9): \nslot:   `
     );
-    if (!logic.isValidMove(board, slot)) {
+    if (!isValidMove(board, slot)) {
       console.log("Error: Slot is occupied");
       playTurn(currPlayer, board);
     } else {
@@ -73,9 +79,9 @@ function playTurn(currPlayer, board) {
     }
   }
   function handleMove(board, slot, currPlayer) {
-    logic.updateBoard(board, slot, currPlayer);
+    updateBoard(board, slot, currPlayer);
 
-    if (logic.checkWin(board)) {
+    if (checkWin(board)) {
       console.log(`congratulations! ${currPlayer.name} is won`);
       return;
     }
