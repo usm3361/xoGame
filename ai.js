@@ -1,3 +1,4 @@
+import { blockWin } from "./logic.js";
 function getComputerMove(board) {
   // console.log(board)
   let availableMoves = [];
@@ -6,12 +7,17 @@ function getComputerMove(board) {
     if (board[i] !== "x" && board[i] !== "o") {
       availableMoves.push(i);
     }
-
-    
   }
+
+  const blocker = blockWin(board)
+  if (!blocker) { 
   // console.log(availableMoves)
   const randomIndex = Math.floor(Math.random() * availableMoves.length);
   // console.log(randomIndex)
   return availableMoves[randomIndex];
+  }
+  else {
+    return blocker
+  }
 }
 export default getComputerMove;
