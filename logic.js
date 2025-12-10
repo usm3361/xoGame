@@ -1,7 +1,7 @@
-function isValidMove(board, position) {
-  const index = position - 1;
-  if (position < 1 || position > 9) return false;
-  if (board[index] === "X" || board[index] === "O") return false;
+function isValidMove(board, slot) {
+    const index = slot-1;
+  if (slot < 1 || slot > 9) return false;
+  if (board[index] === "x" || board[index] === "o") return false;
   return true;
 }
 

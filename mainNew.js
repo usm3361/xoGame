@@ -10,7 +10,7 @@ export default function startGame() {
   let isValidType = false;
   let type = input("please enter type (x or o)\ntype:   ");
   while (!isValidType) {
-    if (type !== "o" && type !== "x" && type.length > 1) {
+    if (type.length > 1 || (type !== "o" && type !== "x")) {
       console.log("This type is not valid, please try again");
       type = input("please enter type (x or o)\ntype:   ");
     } else {
@@ -41,7 +41,7 @@ export default function startGame() {
     playTurn(currPlayer, board);
     if (logic.checkWin(board)) {
       boardFunc.printBoard(board);
-      console.log(`GameOver. congratulations! ${currPlayer.name} is won`);
+      console.log(`GameOver ${currPlayer.name} is won`);
     } else {
       if (currPlayer === p1) {
         currPlayer = p2;
@@ -55,7 +55,12 @@ function playTurn(currPlayer, board) {
   if (currPlayer.name === "Ai") {
     console.log("ai thinks...");
     const computerMove = getComputerMove(board);
-    handleMove(board, computerMove, currPlayer);
+    if (!logic.isValidMove(board, computerMove)) {
+      console.log("Error: Slot is occupied");
+      playTurn(currPlayer, board);
+    } else {
+      handleMove(board, computerMove, currPlayer);
+    }
   } else {
     const slot = input(
       `${currPlayer.name}, please Select a slot (1-9): \nslot:   `
@@ -71,7 +76,7 @@ function playTurn(currPlayer, board) {
     logic.updateBoard(board, slot, currPlayer);
 
     if (logic.checkWin(board)) {
-      console.log(`GameOver. congratulations! ${currPlayer.name} is won`);
+      console.log(`congratulations! ${currPlayer.name} is won`);
       return;
     }
   }
