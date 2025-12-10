@@ -5,16 +5,16 @@ function isValidMove(board, position) {
   return true;
 }
 
-function updateBoard(board, position, mark) {
+function updateBoard(board, position, currPlayer) {
     const index = position - 1;
-    board[index] = mark;
+    board[index] = currPlayer.type;
 }
 
 function checkWin(board) {
     const winPatterns = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8], // שורות
-        [0, 3, 6], [1, 4, 7], [2, 5, 8], // עמודות
-        [0, 4, 8], [2, 4, 6]             // אלכסונים
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], 
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],  
+        [0, 4, 8], [2, 4, 6]            
     ];
 
     for (let pattern of winPatterns) {
@@ -22,6 +22,7 @@ function checkWin(board) {
         if (board[a] === board[b] && board[b] === board[c]) {
             return true;
         }
+        
     }
     return false;
 }
